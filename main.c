@@ -23,14 +23,16 @@ void comunicacao(int socketFD)
     for (;;)
     {
 		char RBuffer[200];
-		memset(RBuffer, 0, 200);
+		memset(RBuffer, '\0', 200);
 		recvfrom(socketFD, RBuffer, 200, 0, (SockAddr*)&client, &len);
     
 		if(!strcmp(RBuffer,"ENCERRAR"))
+		{
 			break;
+		}
 		else
 		{
-			printf("mensagem: %s",RBuffer);
+			printf("mensagem: %s\n",RBuffer);
 		}
     }
 }
