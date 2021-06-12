@@ -1,37 +1,41 @@
 #ifndef SERVERFUNCS_H
 #define SERVERFUNCS_H
 
-/* macros extras ------------------ */
-// usados apenas para simplificação do código / melhor apresentação das informações
+// codigos de cores
 #define CLLR "\033[1;31m"
 #define CLLG "\033[1;32m"
-#define CLW "\033[0m"
 #define CLLB "\033[1;34m"
 #define CLLP "\033[1;35m"
-#define CLB "\033[0;33m"
+#define CLLC "\033[1;36m"
+#define CLW "\033[0m"
 #define CLY "\033[0;33m"
 
-// arquivo de cadastros
-#define CADS "cadastros.txt"
+#define CADS "ServerFiles/cadastros.txt" // arquivo de cadastros
+#define CONFIG "ServerFiles/config.txt" // arquivo de configuracao
+
+
+// string expecial de escrita dos arquivos (para controlar a leitura e escrita corretamente)
+#define SPECCHAR "+=====+"
 
 // escreve colorido
 #define PRINTCL(COLOR,...) printf(COLOR), printf(__VA_ARGS__), printf(CLW)
+
 // escreve com duas cores em sequencia
 #define PRINT2C(A,COLOR1,COLOR2,...) printf(COLOR1), printf(A), printf(COLOR2), printf(__VA_ARGS__), printf(CLW)
 
 /* ----------------------- FUNCOES DE OPERACOES DE DADOS AUXILIARES DO SERVIDOR ---------------------- */
 
-// mostra ip da maquina (apenas para facilitar testes)
-void getServerIP();
-
-// le IP e Porta de um arquivo (retorna porta)
-int getServerInfo(char *ip);
-
-// atualiza o arquivo de cadastros com a lista atualizada
+/* atualiza o arquivo de cadastros com a lista atualizada */
 void atualizaArquivo(NoPerfil *lista);
 
-// organiza escritas de feedback para o servidor (informa o que está ocorrendo)
-void printFB(char *x,int code, char *val, ...);
+/* remove todas as quebras de linha de uma string (\n ou \r) */
+void removeBreak(char *str);
+
+/* logs referentes ao que se trata do socket (socket,bind,listen,accept) */
+void socketLOG(char *x, int code, char *log, char *ip);
+
+/* logs referentes as operacoes feitas pelo(s) cliente(s) */
+void infoLOG(char *x, int code, char *log, char *ip);
 
 /* ----------------------- FUNCOES DE OPERACOES DE DADOS PRINCIPAIS DO SERVIDOR ---------------------- */
 /* ----- cada uma dessas funções corresponde à uma das 8 operações que o cliente pode requisitar ----- */
@@ -49,7 +53,7 @@ Perfil *encontrarPerfil(char *email, NoPerfil *lista);
 /* funcao para adicionar um novo perfil ao registro         */
 /* entrada: referencia para o perfil à cadastrar (Perfil*)  */
 /* retorno: 1 em sucesso ou 0 em falha (int)                */
-int adicionaPerfil(Perfil *p);
+int addPerfil(Perfil *p);
 
 /* funcao para remover um perfil registrado, a partir de seu identificador (email) */
 /* entrada: email (char*)                                                          */
