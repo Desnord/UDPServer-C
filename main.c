@@ -20,7 +20,7 @@ typedef struct sockaddr SockAddr;
 void recebeMSG(int socketFD) // recebimento da mensagem do cliente (gera arquivo temporario com as informacoes)
 {
     SockAddr_in client;
-    int len = sizeof(client);
+    unsigned int len = sizeof(client);
     FILE *temp = fopen(TEMP01, "a");
     for(;;)
     {
@@ -269,6 +269,9 @@ char *interpretaMSG() // interpreta mensagem recebida
         fprintf(temp2,"%d\n", res);
         fclose(temp2);
     }
+	else{
+		strcpy(opcao,"INV");
+	}
 
     fclose(temp);
     remove(TEMP01);
@@ -312,13 +315,15 @@ void comunicacao(int socketFD)
 			char *opt = interpretaMSG();
 
 			if(!strcmp(opt,"ENCERRAR"))
-      {
+			{
 				free(opt);
 				break;
 			}
-
+			if(strcmp(opt,"INV"))
+			{				
+				enviaMSG(socketFD);
+			}
 			free(opt);
-			enviaMSG(socketFD);
 
 			//logMSG();
 			//printFB("OP", 0, inet_ntoa(client.sin_addr), RBuffer);

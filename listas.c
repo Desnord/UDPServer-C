@@ -7,6 +7,7 @@
 /* --------------------------- funcoes de inserir em lista ------------------------- */
 void perfilListInsert(NoPerfil *lista, Perfil *pessoa)
 {
+	if(!lista) return;
     NoPerfil *at;
     for(at = lista; at != NULL; at = at->prox)
     {
@@ -23,6 +24,7 @@ void perfilListInsert(NoPerfil *lista, Perfil *pessoa)
 }
 void NPENListInsert(NoPerfilEmailNome *lista, PerfilEmailNome *info)
 {
+	if(!lista) return;
     NoPerfilEmailNome *at;
     for(at = lista; at != NULL; at = at->prox)
     {
@@ -39,6 +41,7 @@ void NPENListInsert(NoPerfilEmailNome *lista, PerfilEmailNome *info)
 }
 void NPENCListInsert(NoPerfilEmailNomeCurso *lista, PerfilEmailNomeCurso *info)
 {
+	if(!lista) return;
     NoPerfilEmailNomeCurso *at;
     for(at = lista; at != NULL; at = at->prox)
     {
@@ -55,6 +58,7 @@ void NPENCListInsert(NoPerfilEmailNomeCurso *lista, PerfilEmailNomeCurso *info)
 }
 void stringListInsert(NoString *lista, char *str)
 {
+	if(!lista) return;
     NoString *at;
     for(at = lista; at != NULL; at = at->prox)
     {
@@ -73,6 +77,7 @@ void stringListInsert(NoString *lista, char *str)
 /* --------------------------- funcoes de liberar lista ---------------------------- */
 void perfilListFree(NoPerfil *lista)
 {
+	if(!lista) return;
     int len = perfilListLen(lista);
     NoPerfil *auxVet[len];
     NoPerfil *at;
@@ -93,6 +98,7 @@ void perfilListFree(NoPerfil *lista)
 }
 void NPENListFree(NoPerfilEmailNome *lista)
 {
+	if(!lista) return;
     int len = NPENListLen(lista);
     NoPerfilEmailNome *auxVet[len];
     NoPerfilEmailNome *at;
@@ -116,6 +122,7 @@ void NPENListFree(NoPerfilEmailNome *lista)
 }
 void NPENCListFree(NoPerfilEmailNomeCurso *lista)
 {
+	if(!lista) return;
     int len = NPENCListLen(lista);
     NoPerfilEmailNomeCurso *auxVet[len];
     NoPerfilEmailNomeCurso *at;
@@ -140,6 +147,7 @@ void NPENCListFree(NoPerfilEmailNomeCurso *lista)
 }
 void stringListFree(NoString *lista)
 {
+	if(!lista) return;
     int len = stringListLen(lista);
     NoString *auxVet[len];
     NoString *at;
@@ -196,6 +204,7 @@ NoString *newStringList()
 int perfilListLen(NoPerfil *lista)
 {
     int len = 0;
+	if(!lista) return len;
     NoPerfil *at;
     for(at = lista->prox; at != NULL; at = at->prox)
         len++;
@@ -204,6 +213,7 @@ int perfilListLen(NoPerfil *lista)
 int NPENListLen(NoPerfilEmailNome *lista)
 {
     int len = 0;
+	if(!lista) return len;
     NoPerfilEmailNome *at;
     for(at = lista->prox; at != NULL; at = at->prox)
         len++;
@@ -212,6 +222,7 @@ int NPENListLen(NoPerfilEmailNome *lista)
 int NPENCListLen(NoPerfilEmailNomeCurso *lista)
 {
     int len = 0;
+	if(!lista) return len;
     NoPerfilEmailNomeCurso *at;
     for(at = lista->prox; at != NULL; at = at->prox)
         len++;
@@ -220,7 +231,8 @@ int NPENCListLen(NoPerfilEmailNomeCurso *lista)
 int stringListLen(NoString *lista)
 {
     int len = 0;
-    NoString *at;
+	if(!lista) return len;
+	NoString *at;
     for(at = lista->prox; at != NULL; at = at->prox)
         len++;
     return len;
@@ -254,6 +266,7 @@ Perfil *newPerfil()
 }
 void freePerfil(Perfil *p)
 {
+	if(!p) return;
     // libera memória utilizada
     free(p->email);
     free(p->nome);
@@ -267,6 +280,7 @@ void freePerfil(Perfil *p)
 
 int existeString(char *str, NoString *lista)
 {
+	if(!lista) return 0;
     NoString *at;
     for(at = lista; at != NULL; at = at->prox)
     {
@@ -280,6 +294,7 @@ int existeString(char *str, NoString *lista)
 }
 int existePerfil(char *email, NoPerfil *lista)
 {
+	if(!lista) return 0;
     NoPerfil *at;
     for(at = lista->prox; at != NULL; at = at->prox)
     {
@@ -291,6 +306,7 @@ int existePerfil(char *email, NoPerfil *lista)
 
 void perfilListRemove(NoPerfil *lista, char *email)
 {
+	if(!lista) return;
     NoPerfil *at;
     for(at = lista; at != NULL; at = at->prox)
     {
