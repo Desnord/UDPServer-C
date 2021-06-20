@@ -38,8 +38,10 @@ void recebeMSG(int socketFD) // recebimento da mensagem do cliente (gera arquivo
 // interpreta mensagem recebida
 char *interpretaMSG()
 {
-    FILE *temp = fopen(TEMP01, "r");
-    char *opcao = calloc(10,sizeof(char));
+    FILE *temp = fopen(TEMP01, "r+");
+    char *opcao = malloc(10*sizeof(char));
+		memset(opcao,'\0',10);
+
     fgets(opcao,10,temp);
     opcao[strlen(opcao)-1] = '\0';
 
@@ -198,14 +200,13 @@ char *interpretaMSG()
             }
             else if(ctd == 5)
             {
-                line[(int)strlen(line)-1] = '\0';
                 p->ano_formatura = (int)strtol(line,NULL,10);
                 ctd++;
             }
             else if(ctd < 8)
             {
                 NoString *STRlist =  p->habilidades;
-                if(!strcmp(line,"+=========+"))
+                if(!strcmp(line,"+=====+"))
                     ctd++;
                 else
                 {
@@ -220,7 +221,7 @@ char *interpretaMSG()
             else
             {
                 NoString *STRlist = p->experiencia;
-                if(!strcmp(line,"+=========+"))
+                if(!strcmp(line,"+=====+"))
                     ctd++;
                 else
                 {
@@ -308,12 +309,14 @@ void comunicacao(int socketFD)
     for (;;)
     {
 			recebeMSG(socketFD);
-			/*
 			char *opt = interpretaMSG();
 
 			if(!strcmp(opt,"ENCERRAR"))
-            break;
-			*/
+      {
+				free(opt);
+				break;
+			}
+			free(opt);
 
 			//enviaMSG(socketFD);
 
