@@ -35,8 +35,7 @@ void recebeMSG(int socketFD) // recebimento da mensagem do cliente (gera arquivo
     fclose(temp);
 }
 
-// interpreta mensagem recebida
-char *interpretaMSG()
+char *interpretaMSG() // interpreta mensagem recebida
 {
     FILE *temp = fopen(TEMP01, "r+");
     char *opcao = malloc(10*sizeof(char));
@@ -69,7 +68,7 @@ char *interpretaMSG()
             fprintf(temp2,"%s\n", at->perfil->email);     // armazena email
             fprintf(temp2,"%s\n", at->perfil->nome);      // armazena nome
             fprintf(temp2,"%s\n", at->perfil->sobrenome); // armazena sobrenome
-            fprintf(temp2,"%s\n", "+=========+");
+            fprintf(temp2,"%s\n", "+=====+");
         }
         fclose(temp2);
         NPENListFree(lista);
@@ -95,7 +94,7 @@ char *interpretaMSG()
             fprintf(temp2,"%s\n", at->perfil->nome);      // armazena nome
             fprintf(temp2,"%s\n", at->perfil->sobrenome); // armazena sobrenome
             fprintf(temp2,"%s\n", at->perfil->formacao);  // armazena curso
-            fprintf(temp2,"%s\n", "+=========+");
+            fprintf(temp2,"%s\n", "+=====+");
         }
         fclose(temp2);
         NPENCListFree(lista);
@@ -117,13 +116,13 @@ char *interpretaMSG()
             fprintf(temp2,"%s\n", at->pessoa->cidade_residencia);  // armazena residencia
             fprintf(temp2,"%s\n", at->pessoa->formacao);           // armazena formacao academica
             fprintf(temp2,"%d\n", at->pessoa->ano_formatura);      // armazena ano de formatura
-            fprintf(temp2,"%s\n", "+=========+");
-            for(NoString *at2 = at->pessoa->habilidades; at2 != NULL; at2 = at2->prox)
+            fprintf(temp2,"%s\n", "+=====+");
+            for(NoString *at2 = at->pessoa->habilidades->prox; at2 != NULL; at2 = at2->prox)
                 fprintf(temp2,"%s\n", at2->str);
-            fprintf(temp2,"%s\n", "+=========+");
-            for(NoString *at2 = at->pessoa->experiencia; at2 != NULL; at2 = at2->prox)
+            fprintf(temp2,"%s\n", "+=====+");
+            for(NoString *at2 = at->pessoa->experiencia->prox; at2 != NULL; at2 = at2->prox)
                 fprintf(temp2,"%s\n", at2->str);
-            fprintf(temp2,"%s\n", "+=========+");
+            fprintf(temp2,"%s\n", "+=====+");
         }
         fclose(temp2);
         perfilListFree(lista);
@@ -147,14 +146,14 @@ char *interpretaMSG()
             fprintf(temp2,"%s\n", p->cidade_residencia);    // armazena residencia
             fprintf(temp2,"%s\n", p->formacao);             // armazena formacao academica
             fprintf(temp2,"%d\n", p->ano_formatura);        // armazena ano de formatura
-            fprintf(temp2,"%s\n", "+=========+");
+            fprintf(temp2,"%s\n", "+=====+");
 
             for(NoString *at = p->habilidades->prox; at != NULL; at = at->prox)
                 fprintf(temp2,"%s\n", at->str);
-            fprintf(temp2,"%s\n", "+=========+");
+            fprintf(temp2,"%s\n", "+=====+");
             for(NoString *at = p->experiencia->prox; at != NULL; at = at->prox)
                 fprintf(temp2,"%s\n", at->str);
-            fprintf(temp2,"%s\n", "+=========+");
+            fprintf(temp2,"%s\n", "+=====+");
         }
         else
         {
@@ -176,7 +175,7 @@ char *interpretaMSG()
 
         int ctd = 0;
         char line[200];
-        memset(line, 0, 200);
+        memset(line, '\0', 200);
         while(fgets(line,200,temp))
         {
             line[(int)strlen(line)-1] = '\0';
@@ -210,7 +209,6 @@ char *interpretaMSG()
                     ctd++;
                 else
                 {
-                    line[(int)strlen(line)-1] = '\0';
                     char *strAUX = malloc(sizeof(char) * ((int)strlen(line)+1));
                     strcpy(strAUX, line);
 
@@ -225,7 +223,6 @@ char *interpretaMSG()
                     ctd++;
                 else
                 {
-                    line[(int)strlen(line)-1] = '\0';
                     char *strAUX = malloc(sizeof(char) * ((int)strlen(line)+1));
                     strcpy(strAUX, line);
 
@@ -234,9 +231,7 @@ char *interpretaMSG()
                 }
             }
         }
-
         int res = addPerfil(p);
-
         FILE *temp2 = fopen(TEMP02,"w");
         fprintf(temp2,"%d\n", res);
         fclose(temp2);
@@ -246,12 +241,12 @@ char *interpretaMSG()
         // email
         char eml[100];
         fgets(eml,100,temp);
-        eml[strlen(eml)-1] = '\0';
+				eml[(int)strlen(eml)-1] = '\0';
 
         // experiencia
         char exp[100];
         fgets(exp,100,temp);
-        exp[strlen(exp)-1] = '\0';
+				exp[(int)strlen(exp)-1] = '\0';
 
         // tenta adicionar experiencia.
         int res = addExperiencia(eml,exp);
@@ -287,9 +282,14 @@ void enviaMSG(int socketFD)
 
     FILE *temp = fopen(TEMP02, "r");
     char line[200];
+		memset(line,'\0',200);
 
     while(fgets( line, 200, temp) != NULL)
-        sendto(socketFD, line, 200, 0, (SockAddr*)&client, sizeof(client));
+		{
+			//printf("%s",line);
+      sendto(socketFD, line, 200, 0, (SockAddr*)&client, sizeof(client));
+		}
+
     strcpy(line,"EOF");
     sendto(socketFD,  line, 200, 0, (SockAddr*)&client, sizeof(client));
 
@@ -316,9 +316,9 @@ void comunicacao(int socketFD)
 				free(opt);
 				break;
 			}
-			free(opt);
 
-			//enviaMSG(socketFD);
+			free(opt);
+			enviaMSG(socketFD);
 
 			//logMSG();
 			//printFB("OP", 0, inet_ntoa(client.sin_addr), RBuffer);
@@ -369,7 +369,7 @@ int main()
 	// SOCKET
 	int socketFD = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); // cria file descriptor do socket UDP
 	SockAddr_in server;												   // estrutura do socket
-	socketLOG("SBL", socketFD, "socket ", ""); 		   // verifica criação do socket
+	socketLOG("SB", socketFD, "socket ", ""); 		   // verifica criação do socket
 
 	/* atribui valores à estrutura do socket */
 	server.sin_family = AF_INET;            // AF_INET é a familia de protocolos do IPV4
@@ -377,8 +377,8 @@ int main()
 	server.sin_port = htons(port);          // porta do servidor
 
 	int do_bind = bind(socketFD, (SockAddr*)&server, sizeof(server)); // vincula um nome ao socket
-	socketLOG("SBL", do_bind, "bind   ", ""); 			  // verifica bind
+	socketLOG("SB", do_bind, "bind   ", ""); 			  // verifica bind
 	comunicacao(socketFD);
 
-    return 0;
+  return 0;
 }

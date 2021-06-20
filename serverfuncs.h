@@ -34,9 +34,6 @@ void removeBreak(char *str);
 /* logs referentes ao que se trata do socket (socket,bind,listen,accept) */
 void socketLOG(char *x, int code, char *log, char *ip);
 
-/* logs referentes as operacoes feitas pelo(s) cliente(s) */
-void infoLOG(char *x, int code, char *log, char *ip);
-
 /* ----------------------- FUNCOES DE OPERACOES DE DADOS PRINCIPAIS DO SERVIDOR ---------------------- */
 /* ----- cada uma dessas funções corresponde à uma das 8 operações que o cliente pode requisitar ----- */
 
